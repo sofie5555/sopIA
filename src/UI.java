@@ -1,5 +1,4 @@
 
-// No simpin allowed
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
@@ -30,7 +29,6 @@ public class UI {
 	private MyPanel4 panel4;
 	//This object will store strings
 	private ResourceBundle labels;
-	//If item have text, when make it global
 	private JFrame frame;
 	private JMenu mnNewMenu;
 	private JMenuItem HouseItem;
