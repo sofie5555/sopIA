@@ -2,8 +2,8 @@ import java.sql.*;
 
 public class CreatorDB {
 	//DB login details
-    private static final String user = "root";
-    private static final String password = "123456789";
+    public static final String user = "root";
+    public static final String password = "123456789";
     //JDBC variables for opening and managing connection
     private static Connection con;
     private static Statement stmt;
@@ -24,10 +24,12 @@ public class CreatorDB {
             and lang of string to save user language
              */
             stmt.executeUpdate("CREATE TABLE `house_database`.`users` (\n" +
-                    "  `password` INT NOT NULL,\n" +
+                    "  `password` VARCHAR(45) NOT NULL,\n" +
                     "  `username` VARCHAR(45) NOT NULL,\n" +
                     "  `access_level` INT NOT NULL, \n" +
-                    "  `lang` VARCHAR(3) NOT NULL);");
+                    "  `lang` VARCHAR(3) NOT NULL" + 
+                    "  `id` INT NOT NULL AUTO_INCREMENT,\n" + 
+                    "  PRIMARY KEY (`id`));");
             /*Creating table of house data with name "houses_data"
             which contains columns "date" of date to save record date,
             total_birds_h of integer to save total bird count,

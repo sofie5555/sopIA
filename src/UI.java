@@ -2,6 +2,10 @@
 // No simpin allowed
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -10,6 +14,11 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class UI {
+	//JDBC variables for opening and managing connection
+	private static Connection con;
+    private static Statement stmt;
+    //query to change language
+    private String changeLangQuery = "update house_database.users set lang = '%s' where id=%d";
 	private JPanel contentPane;
 	private MyPanel panel1;
 	private MyPanel2 panel2;
@@ -56,9 +65,15 @@ public class UI {
 	/**
 	 * @wbp.parser.entryPoint
 	 */
-	void displayGUI() {
-		//Getting localized english (will be changed then DB will added) strings
-		labels = ResourceBundle.getBundle("LabelsBundle", Locale.ENGLISH);
+	void displayGUI(String lang, int id) {
+		try {
+			//Opening local connection by using username and password
+            con = DriverManager.getConnection
+                    ("jdbc:mysql://localhost:3306/", CreatorDB.user, CreatorDB.password);
+            //Create variable for managing database
+            stmt = con.createStatement();
+		//Getting localized strings
+		labels = ResourceBundle.getBundle("LabelsBundle", new Locale(lang));
 		CardLayout cardLayout = new CardLayout();
 		//Get title for window. You need to use the key "frame" to get the expected string
 		frame = new JFrame(labels.getString("frame"));
@@ -264,7 +279,13 @@ public class UI {
 		panel4.add(langLbl);
 
 		JSlider slider = new JSlider();
-		slider.setValue(1);
+		//set locale 
+		if(lang.equals("en"))
+			slider.setValue(1);
+		else if(lang.equals("ru"))
+			slider.setValue(0);
+		else 
+			slider.setValue(2);
 		slider.setSnapToTicks(true);
 		slider.setBackground(Color.LIGHT_GRAY);
 		slider.setMajorTickSpacing(1);
@@ -286,18 +307,36 @@ public class UI {
 					labels = ResourceBundle.getBundle("LabelsBundle", new Locale("ru"));
 					//Change labels, buttons and ect. text
 					ChangeLocale();
+					try {
+						//Execute query to change language
+						stmt.execute(String.format(changeLangQuery, "ru", id));
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
 				} else if (slider.getValue() == 2 && slider.getValueIsAdjusting() == false) {
 					System.out.println("Changing language to Hungarian...");
 					//Change string resources. Getting string again, but use another locale
 					labels = ResourceBundle.getBundle("LabelsBundle", new Locale("hu"));
 					//Change labels, buttons and ect. text
 					ChangeLocale();
+					try {
+						//Execute query to change language
+						stmt.execute(String.format(changeLangQuery, "hu", id));
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
 				} else if (slider.getValue() == 1 && slider.getValueIsAdjusting() == false) {
 					System.out.println("Changing language to English...");
 					//Change string resources. Getting string again, but use another locale
 					labels = ResourceBundle.getBundle("LabelsBundle", Locale.ENGLISH);
 					//Change labels, buttons and ect. text
 					ChangeLocale();
+					try {
+						//Execute query to change language
+						stmt.execute(String.format(changeLangQuery, "en", id));
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 		});
@@ -318,6 +357,20 @@ public class UI {
 				LoginGUI app1 = new LoginGUI();
 				frame.dispose();
 				app1.setVisible(true);
+				 try {
+		                //Close connection
+		                con.close();
+		            } catch (SQLException se) {
+		                //Catching exceptions and print it into console
+		                se.printStackTrace();
+		            }
+		            try {
+		                //Close manager
+		                stmt.close();
+		            } catch (SQLException se) {
+		                //Catching exceptions and print it into console
+		                se.printStackTrace();
+		            }
 			}
 		});
 
@@ -449,6 +502,10 @@ public class UI {
 
 			}
 		});
+		}catch(SQLException sqlEx) {
+			//Catching exceptions and print it into console
+			sqlEx.printStackTrace();
+		}
 	}
 	void Refresh() {
 		System.out.println("Refreshing...");
