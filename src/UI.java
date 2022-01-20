@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Locale;
@@ -19,6 +20,8 @@ public class UI {
     private static Statement stmt;
     //query to change language
     private String changeLangQuery = "update house_database.users set lang = '%s' where id=%d";
+    private String setTodayHouseDataQuery = "insert into house_database.house_data values (%d, CURRENT_DATE(), %d, %d, %d, %d, %d, %d);";
+    private String getDailyStatisticForHouse = "SELECT * FROM house_database.house_data where house_id = %d ORDER BY date desc limit 1;";
 	private JPanel contentPane;
 	private MyPanel panel1;
 	private MyPanel2 panel2;
@@ -62,6 +65,13 @@ public class UI {
 	private JLabel sttngsLbl;
 	private JLabel langLbl;
 	private JButton logOutBtn;
+	private JLabel insTotalBirds;
+	private JLabel insDeadBirds;
+	private JLabel insTotalWater;
+	private JLabel insTotalFood;
+	private JLabel insConsWater;
+	private JLabel insConsFood;
+	private JButton save;
 	/**
 	 * @wbp.parser.entryPoint
 	 */
@@ -182,7 +192,7 @@ public class UI {
 		panel2.add(rateLbl);
 		//panel3.add(rateLbl);
 
-		JLabel rateDisplay = new JLabel("--%");
+		final JLabel rateDisplay = new JLabel("--%");
 		rateDisplay.setBounds(259, 139, 61, 16);
 		panel2.add(rateDisplay);
 
@@ -192,7 +202,7 @@ public class UI {
 		panel2.add(deathLbl);
 		//panel3.add(rateLbl);
 
-		JLabel rateDisplay_1 = new JLabel("999");
+		final JLabel rateDisplay_1 = new JLabel("999");
 		rateDisplay_1.setBounds(259, 167, 61, 16);
 		panel2.add(rateDisplay_1);
 
@@ -208,13 +218,66 @@ public class UI {
 		panel2.add(consumptionLbl2);
 		//panel3.add(rateLbl);
 
-		JLabel rateDisplay_1_1 = new JLabel("???");
+		final JLabel rateDisplay_1_1 = new JLabel("???");
 		rateDisplay_1_1.setBounds(259, 199, 61, 16);
 		panel2.add(rateDisplay_1_1);
 
-		JLabel rateDisplay_1_1_1 = new JLabel("???");
+		final JLabel rateDisplay_1_1_1 = new JLabel("???");
 		rateDisplay_1_1_1.setBounds(259, 228, 61, 16);
 		panel2.add(rateDisplay_1_1_1);
+		
+		insTotalBirds = new JLabel("Insert Total Birds Today:");
+		insTotalBirds.setBounds(106, 258, 140, 16);
+		panel2.add(insTotalBirds);
+		
+		final JTextField setTotalBirds = new JTextField();
+		setTotalBirds.setBounds(276, 258, 100, 16);
+		panel2.add(setTotalBirds);
+		
+		insDeadBirds = new JLabel("Insert Dead Birds Today:");
+		insDeadBirds.setBounds(106, 288, 140, 16);
+		panel2.add(insDeadBirds);
+		
+		final JTextField setDeadBirds = new JTextField();
+		setDeadBirds.setBounds(276, 288, 100, 16);
+		panel2.add(setDeadBirds);
+		
+		insTotalWater = new JLabel("Insert Total Water Today:");
+		insTotalWater.setBounds(101, 318, 145, 16);
+		panel2.add(insTotalWater);
+		
+		final JTextField setTotalWater = new JTextField();
+		setTotalWater.setBounds(276, 318, 100, 16);
+		panel2.add(setTotalWater);
+		
+		insTotalFood = new JLabel("Insert Total Food Today:");
+		insTotalFood.setBounds(106, 348, 140, 16);
+		panel2.add(insTotalFood);
+		
+		final JTextField setTotalFood = new JTextField();
+		setTotalFood.setBounds(276, 348, 100, 16);
+		panel2.add(setTotalFood);
+		
+		insConsWater = new JLabel("Insert Consumed Water Today:");
+		insConsWater.setBounds(71, 378, 175, 16);
+		panel2.add(insConsWater);
+		
+		final JTextField setConsWater = new JTextField();
+		setConsWater.setBounds(276, 378, 100, 16);
+		panel2.add(setConsWater);
+		
+		insConsFood = new JLabel("Insert Consumed Food Today:");
+		insConsFood.setBounds(76, 408, 170, 16);
+		panel2.add(insConsFood);
+		
+		final JTextField setConsFood = new JTextField();
+		setConsFood.setBounds(276, 408, 100, 16);
+		panel2.add(setConsFood);
+		
+		save = new JButton("Save");
+		save.setBounds(217, 458, 75, 30);
+		panel2.add(save);
+		
 		panel3_1 = new MyPanel3(contentPane);
 		contentPane.add(panel3_1, "Panel 3");
 		panel3_1.setLayout(null);
@@ -248,19 +311,19 @@ public class UI {
 		refreshTotalBtn.setBounds(403, 10, 91, 29);
 		panel3_1.add(refreshTotalBtn);
 
-		JLabel rateDisplayTotal = new JLabel("--%");
+		final JLabel rateDisplayTotal = new JLabel("--%");
 		rateDisplayTotal.setBounds(259, 133, 61, 16);
 		panel3_1.add(rateDisplayTotal);
 
-		JLabel rateDisplay_1_2 = new JLabel("999");
+		final JLabel rateDisplay_1_2 = new JLabel("999");
 		rateDisplay_1_2.setBounds(259, 161, 61, 16);
 		panel3_1.add(rateDisplay_1_2);
 
-		JLabel rateDisplay_1_1_2 = new JLabel("???");
+		final JLabel rateDisplay_1_1_2 = new JLabel("???");
 		rateDisplay_1_1_2.setBounds(259, 193, 61, 16);
 		panel3_1.add(rateDisplay_1_1_2);
 
-		JLabel rateDisplay_1_1_1_1 = new JLabel("???");
+		final JLabel rateDisplay_1_1_1_1 = new JLabel("???");
 		rateDisplay_1_1_1_1.setBounds(259, 222, 61, 16);
 		panel3_1.add(rateDisplay_1_1_1_1);
 		contentPane.add(panel4, "Panel 4");
@@ -374,6 +437,88 @@ public class UI {
 			}
 		});
 
+		save.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String item = (String)comboBox.getSelectedItem();
+                if(item.equals("House 1")) {
+                	try {
+    					//Execute query to add daily info
+    					stmt.execute(String.format(setTodayHouseDataQuery, 1, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWater.getText()),Integer.parseInt(setConsWater.getText())));
+    					
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                } else if(item.equals("House 2")) {
+                	try {
+                		//Execute query to add daily info
+                		stmt.execute(String.format(setTodayHouseDataQuery, 2, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWater.getText()),Integer.parseInt(setConsWater.getText())));
+    					
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                }else if(item.equals("House 3")) {
+                	try {
+                		//Execute query to add daily info
+                		stmt.execute(String.format(setTodayHouseDataQuery, 3, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWater.getText()),Integer.parseInt(setConsWater.getText())));
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                }else if(item.equals("House 4")) {
+                	try {
+                		//Execute query to add daily info
+                		stmt.execute(String.format(setTodayHouseDataQuery, 4, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWater.getText()),Integer.parseInt(setConsWater.getText())));
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                }else if(item.equals("House 5")) {
+                	try {
+                		//Execute query to add daily info
+                		stmt.execute(String.format(setTodayHouseDataQuery, 5, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWater.getText()),Integer.parseInt(setConsWater.getText())));
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                }else if(item.equals("House 6")) {
+                	try {
+                		//Execute query to add daily info
+                		stmt.execute(String.format(setTodayHouseDataQuery, 6, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWater.getText()),Integer.parseInt(setConsWater.getText())));
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                }else if(item.equals("House 7")) {
+                	try {
+                		//Execute query to add daily info
+                		stmt.execute(String.format(setTodayHouseDataQuery, 7, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWater.getText()),Integer.parseInt(setConsWater.getText())));
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                }else if(item.equals("House 8")) {
+                	try {
+                		//Execute query to add daily info
+                		stmt.execute(String.format(setTodayHouseDataQuery, 8, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWater.getText()),Integer.parseInt(setConsWater.getText())));
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                }else if(item.equals("House 9")) {
+                	try {
+                		//Execute query to add daily info
+                		stmt.execute(String.format(setTodayHouseDataQuery, 9, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWater.getText()),Integer.parseInt(setConsWater.getText())));
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                }else if(item.equals("House 10")) {
+                	try {
+                		//Execute query to add daily info
+                		stmt.execute(String.format(setTodayHouseDataQuery, 10, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWater.getText()),Integer.parseInt(setConsWater.getText())));
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                }
+				
+			}
+		});
+		
 		SettingsMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -405,6 +550,20 @@ public class UI {
 				//Showing second panel and switch element of JComboBox
 				layout.show(contentPane, "Panel 2");
 				comboBox.setSelectedIndex(0);
+				try {
+					//Execute query to change language
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 1));
+					if(rs.next()) {
+						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+					}else {
+						System.out.println("No data for house 1");
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		hs2.addActionListener(new ActionListener() {
@@ -414,6 +573,20 @@ public class UI {
 				//Showing second panel and switch element of JComboBox
 				layout.show(contentPane, "Panel 2");
 				comboBox.setSelectedIndex(1);
+				try {
+					//Execute query to change language
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 2));
+					if(rs.next()) {
+						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+					}else {
+						System.out.println("No data for house 2");
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		hs3.addActionListener(new ActionListener() {
@@ -423,6 +596,20 @@ public class UI {
 				//Showing second panel and switch element of JComboBox
 				layout.show(contentPane, "Panel 2");
 				comboBox.setSelectedIndex(2);
+				try {
+					//Execute query to change language
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 3));
+					if(rs.next()) {
+						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+					}else {
+						System.out.println("No data for house 3");
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		hs4.addActionListener(new ActionListener() {
@@ -432,6 +619,20 @@ public class UI {
 				//Showing second panel and switch element of JComboBox
 				layout.show(contentPane, "Panel 2");
 				comboBox.setSelectedIndex(3);
+				try {
+					//Execute query to change language
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 4));
+					if(rs.next()) {
+						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+					}else {
+						System.out.println("No data for house 4");
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		hs5.addActionListener(new ActionListener() {
@@ -441,6 +642,20 @@ public class UI {
 				//Showing second panel and switch element of JComboBox
 				layout.show(contentPane, "Panel 2");
 				comboBox.setSelectedIndex(4);
+				try {
+					//Execute query to change language
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 5));
+					if(rs.next()) {
+						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+					}else {
+						System.out.println("No data for house 5");
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		hs6.addActionListener(new ActionListener() {
@@ -450,6 +665,20 @@ public class UI {
 				//Showing second panel and switch element of JComboBox
 				layout.show(contentPane, "Panel 2");
 				comboBox.setSelectedIndex(5);
+				try {
+					//Execute query to change language
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 6));
+					if(rs.next()) {
+						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+					}else {
+						System.out.println("No data for house 6");
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		hs7.addActionListener(new ActionListener() {
@@ -459,6 +688,20 @@ public class UI {
 				//Showing second panel and switch element of JComboBox
 				layout.show(contentPane, "Panel 2");
 				comboBox.setSelectedIndex(6);
+				try {
+					//Execute query to change language
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 7));
+					if(rs.next()) {
+						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+					}else {
+						System.out.println("No data for house 7");
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		hs8.addActionListener(new ActionListener() {
@@ -468,6 +711,20 @@ public class UI {
 				//Showing second panel and switch element of JComboBox
 				layout.show(contentPane, "Panel 2");
 				comboBox.setSelectedIndex(7);
+				try {
+					//Execute query to change language
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 8));
+					if(rs.next()) {
+						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+					}else {
+						System.out.println("No data for house 8");
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		hs9.addActionListener(new ActionListener() {
@@ -477,6 +734,20 @@ public class UI {
 				//Showing second panel and switch element of JComboBox
 				layout.show(contentPane, "Panel 2");
 				comboBox.setSelectedIndex(8);
+				try {
+					//Execute query to change language
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 9));
+					if(rs.next()) {
+						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+					}else {
+						System.out.println("No data for house 9");
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		hs10.addActionListener(new ActionListener() {
@@ -486,7 +757,181 @@ public class UI {
 				//Showing second panel and switch element of JComboBox
 				layout.show(contentPane, "Panel 2");
 				comboBox.setSelectedIndex(9);
+				try {
+					//Execute query to change language
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 10));
+					if(rs.next()) {
+						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+					}else {
+						System.out.println("No data for house 10");
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			}
+		});
+		comboBox.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+                String item = (String)comboBox.getSelectedItem();
+                if(item.equals("House 1")) {
+                	try {
+    					//Execute query to change language
+    					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 1));
+    					if(rs.next()) {
+    						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+    						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+    						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+    						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+    					}else {
+    						System.out.println("No data for house 1");
+    					}
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                } else if(item.equals("House 2")) {
+                	try {
+    					//Execute query to change language
+    					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 2));
+    					if(rs.next()) {
+    						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+    						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+    						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+    						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+    					}else {
+    						System.out.println("No data for house 2");
+    					}
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                }else if(item.equals("House 3")) {
+                	try {
+    					//Execute query to change language
+    					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 3));
+    					if(rs.next()) {
+    						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+    						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+    						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+    						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+    					}else {
+    						System.out.println("No data for house 3");
+    					}
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                }else if(item.equals("House 4")) {
+                	try {
+    					//Execute query to change language
+    					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 4));
+    					if(rs.next()) {
+    						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+    						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+    						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+    						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+    					}else {
+    						System.out.println("No data for house 4");
+    					}
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                }else if(item.equals("House 5")) {
+                	try {
+    					//Execute query to change language
+    					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 5));
+    					if(rs.next()) {
+    						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+    						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+    						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+    						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+    					}else {
+    						System.out.println("No data for house 5");
+    					}
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                }else if(item.equals("House 6")) {
+                	try {
+    					//Execute query to change language
+    					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 6));
+    					if(rs.next()) {
+    						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+    						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+    						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+    						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+    					}else {
+    						System.out.println("No data for house 6");
+    					}
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                }else if(item.equals("House 7")) {
+                	try {
+    					//Execute query to change language
+    					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 7));
+    					if(rs.next()) {
+    						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+    						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+    						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+    						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+    					}else {
+    						System.out.println("No data for house 7");
+    					}
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                }else if(item.equals("House 8")) {
+                	try {
+    					//Execute query to change language
+    					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 8));
+    					if(rs.next()) {
+    						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+    						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+    						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+    						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+    					}else {
+    						System.out.println("No data for house 8");
+    					}
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                }else if(item.equals("House 9")) {
+                	try {
+    					//Execute query to change language
+    					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 9));
+    					if(rs.next()) {
+    						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+    						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+    						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+    						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+    					}else {
+    						System.out.println("No data for house 9");
+    					}
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                }else if(item.equals("House 10")) {
+                	try {
+    					//Execute query to change language
+    					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 10));
+    					if(rs.next()) {
+    						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
+    						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
+    						rateDisplay_1_1.setText((rs.getFloat("water_total")-rs.getFloat("water_cons"))+"");
+    						rateDisplay_1_1_1.setText((rs.getFloat("food_total")-rs.getFloat("food_cons"))+"");
+    					}else {
+    						System.out.println("No data for house 10");
+    					}
+    				} catch (SQLException e1) {
+    					e1.printStackTrace();
+    				}
+                }
+				
+			}
+			
 		});
 		refreshDailyBtn.addActionListener(new ActionListener() {
 			@Override
