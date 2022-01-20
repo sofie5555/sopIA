@@ -24,6 +24,7 @@ public class LoginGUI extends JFrame {
 
 	public LoginGUI() {
 		super("Simple Example");
+		
 		try {
 			//Opening local connection by using username and password
             con = DriverManager.getConnection
@@ -115,10 +116,50 @@ public class LoginGUI extends JFrame {
 		passwordField.setEchoChar('☻'); // lil boops
 		passwordField.setBounds(50, 140, 335, 47);
 		add(passwordField);
+		databaseControll();
 		}catch(SQLException sqlEx) {
 			//Catching exceptions and print it into console
 			sqlEx.printStackTrace();
 		}
+	}
+	
+	private void databaseControll() {
+		JButton create = new JButton("Create Database");
+		JButton drop = new JButton("Drop Database");
+		create.setBounds(10, 10, 140, 20);
+		drop.setBounds(160, 10, 120, 20);
+		JButton addUser = new JButton("Add user un='sop' p='sop' ");
+		addUser.setBounds(10, 40, 300, 20);
+		
+		addUser.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				CreatorDB.addUser();
+			}
+			
+		});
+		
+		create.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				CreatorDB.createDB();
+			}
+			
+		});
+		
+		drop.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				CreatorDB.dropDB();
+			}
+			
+		});
+		add(create);
+		add(drop);
+		add(addUser);
 	}
 
 	private String decodedPass() {

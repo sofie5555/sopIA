@@ -7,6 +7,66 @@ public class CreatorDB {
     //JDBC variables for opening and managing connection
     private static Connection con;
     private static Statement stmt;
+    
+    public static void addUser() {
+    	try {
+	    	//Opening local connection by using username and password
+	        con = DriverManager.getConnection
+	                ("jdbc:mysql://localhost:3306/", user, password);
+	        //Create variable for managing database
+	        stmt = con.createStatement();
+	        //Add user with name sop and password sop
+	        stmt.executeUpdate("insert into house_database.users (password, username, access_level, lang) values ('sop','sop',3,'en');");
+    	 } catch (SQLException sqlEx) {
+             //Catching exceptions and print it into console
+             sqlEx.printStackTrace();
+         } finally {
+             try {
+                 //Close connection
+                 con.close();
+             } catch (SQLException se) {
+                 //Catching exceptions and print it into console
+                 se.printStackTrace();
+             }
+             try {
+                 //Close manager
+                 stmt.close();
+             } catch (SQLException se) {
+                 //Catching exceptions and print it into console
+                 se.printStackTrace();
+             }
+         }
+    }
+    
+    public static void dropDB() {
+    	 try {
+	    	//Opening local connection by using username and password
+	        con = DriverManager.getConnection
+	                ("jdbc:mysql://localhost:3306/", user, password);
+	        //Create variable for managing database
+	        stmt = con.createStatement();
+	        //Dropping database with name house_database
+	        stmt.executeUpdate("DROP DATABASE house_database");
+    	 } catch (SQLException sqlEx) {
+             //Catching exceptions and print it into console
+             sqlEx.printStackTrace();
+         } finally {
+             try {
+                 //Close connection
+                 con.close();
+             } catch (SQLException se) {
+                 //Catching exceptions and print it into console
+                 se.printStackTrace();
+             }
+             try {
+                 //Close manager
+                 stmt.close();
+             } catch (SQLException se) {
+                 //Catching exceptions and print it into console
+                 se.printStackTrace();
+             }
+         }
+    }
 
     public static void createDB() {
         try {
@@ -23,13 +83,13 @@ public class CreatorDB {
             access_level of integer to save access level
             and lang of string to save user language
              */
-            stmt.executeUpdate("CREATE TABLE `house_database`.`users` (\n" +
-                    "  `password` VARCHAR(45) NOT NULL,\n" +
-                    "  `username` VARCHAR(45) NOT NULL,\n" +
-                    "  `access_level` INT NOT NULL, \n" +
-                    "  `lang` VARCHAR(3) NOT NULL" + 
-                    "  `id` INT NOT NULL AUTO_INCREMENT,\n" + 
-                    "  PRIMARY KEY (`id`));");
+            stmt.executeUpdate("CREATE TABLE `house_database`.`users` (\r\n"
+            		+ "  `id` INT NOT NULL AUTO_INCREMENT,\r\n"
+            		+ "  `password` VARCHAR(45) NOT NULL,\r\n"
+            		+ "  `username` VARCHAR(45) NOT NULL,\r\n"
+            		+ "  `access_level` INT NOT NULL,\r\n"
+            		+ "  `lang` VARCHAR(45) NOT NULL,\r\n"
+            		+ "  PRIMARY KEY (`id`));");
             /*Creating table of house data with name "houses_data"
             which contains columns "date" of date to save record date,
             total_birds_h of integer to save total bird count,

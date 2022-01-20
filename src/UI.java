@@ -19,7 +19,7 @@ public class UI {
 	private static Connection con;
     private static Statement stmt;
     //query to change language
-    private String changeLangQuery = "update house_database.users set lang = '%s' where id=%d";
+    private String changeLangQuery = "update house_database.users set lang = '%s' where id=%d;";
     private String setTodayHouseDataQuery = "insert into house_database.house_data values (%d, CURRENT_DATE(), %d, %d, %d, %d, %d, %d);";
     private String getDailyStatisticForHouse = "SELECT * FROM house_database.house_data where house_id = %d ORDER BY date desc limit 1;";
 	private JPanel contentPane;
