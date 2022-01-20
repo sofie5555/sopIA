@@ -3,7 +3,7 @@ import java.sql.*;
 public class CreatorDB {
 	//DB login details
     public static final String user = "root";
-    public static final String password = "123456789";
+    public static final String password = "rootroot";
     //JDBC variables for opening and managing connection
     private static Connection con;
     private static Statement stmt;
