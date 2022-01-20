@@ -124,7 +124,7 @@ public class LoginGUI extends JFrame {
 	}
 	
 	private void databaseControll() {
-		JButton create = new JButton("Create Database");
+		JButton create = new JButton("Create Database.");
 		JButton drop = new JButton("Drop Database");
 		create.setBounds(10, 10, 140, 20);
 		drop.setBounds(160, 10, 120, 20);
