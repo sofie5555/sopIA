@@ -107,8 +107,7 @@ public class CreatorDB {
                     "  `dead_birds_h` INT NOT NULL,\n" +
                     "  `food_total` FLOAT NOT NULL,\n" +
                     "  `food_cons` FLOAT NOT NULL,\n" +
-                    "  `water_total` FLOAT NOT NULL,\n" +
-                    "  `water_cons` FLOAT NOT NULL);");
+                    "  `weight_total` FLOAT NOT NULL);");
         } catch (SQLException sqlEx) {
             //Catching exceptions and print it into console
             sqlEx.printStackTrace();
