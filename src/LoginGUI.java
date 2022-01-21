@@ -17,7 +17,7 @@ public class LoginGUI extends JFrame {
 	private JTextField txtUsername;
 	private JPasswordField passwordField;
 	public static boolean credentialVerified;
-	//Query to search user with username and password
+	//Query to search user with username and password 
 	private String checkQuery = "SELECT * FROM house_database.users where username='%s' and password='%s'";
 	static LoginGUI app1 = new LoginGUI();
 
