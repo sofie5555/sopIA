@@ -122,7 +122,7 @@ public class UI {
 		panel1.setLayout(null);
 
 		HouseLbl = new JLabel(labels.getString("HouseLbl"));
-		HouseLbl.setFont(new Font("AppleGothic", Font.PLAIN, 20));
+		HouseLbl.setFont(new Font("Roboto", Font.PLAIN, 20));
 		HouseLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		HouseLbl.setBounds(199, 16, 210, 25);
 		panel1.add(HouseLbl);
@@ -169,7 +169,7 @@ public class UI {
 		panel2.setLayout(null);
 		dailyStatsLbl = new JLabel(labels.getString("dailyStatsLbl"));
 		dailyStatsLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		dailyStatsLbl.setFont(new Font("AppleGothic", Font.PLAIN, 18));
+		dailyStatsLbl.setFont(new Font("Roboto", Font.PLAIN, 18));
 		dailyStatsLbl.setBounds(88, 18, 232, 22);
 		panel2.add(dailyStatsLbl);
 
@@ -290,7 +290,7 @@ public class UI {
 		
 		totStatsLbl = new JLabel(labels.getString("totStatsLbl"));
 		totStatsLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		totStatsLbl.setFont(new Font("AppleGothic", Font.PLAIN, 18));
+		totStatsLbl.setFont(new Font("Roboto", Font.PLAIN, 18));
 		totStatsLbl.setBounds(88, 18, 232, 22);
 		panel3_1.add(totStatsLbl);
 
@@ -336,14 +336,14 @@ public class UI {
 		panel4.setLayout(null);
 
 		sttngsLbl = new JLabel(labels.getString("sttngsLbl"));
-		sttngsLbl.setFont(new Font("AppleGothic", Font.PLAIN, 20));
+		sttngsLbl.setFont(new Font("Roboto", Font.PLAIN, 20));
 		sttngsLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		sttngsLbl.setBounds(180, 6, 143, 35);
 		panel4.add(sttngsLbl);
 
 		//Get string for langLbl. Now you need use another key to get expected string
 		langLbl = new JLabel(labels.getString("langLbl"));
-		langLbl.setFont(new Font("AppleGothic", Font.PLAIN, 16));
+		langLbl.setFont(new Font("Roboto", Font.PLAIN, 16));
 		langLbl.setBounds(162, 103, 123, 16);
 		panel4.add(langLbl);
 
