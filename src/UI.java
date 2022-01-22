@@ -72,8 +72,10 @@ public class UI {
 	private JLabel insTotalFood;
 	private JLabel insConsFood;
 	private JButton save;
-	private JCalendar calendar2;
-	private JCalendar calendar1;
+	private JCalendar calendar;
+	private JButton showcalendar1;
+	private JButton showcalendar2;
+	private JFrame calendarFrame;
 	/**
 	 * @wbp.parser.entryPoint
 	 */
@@ -88,6 +90,12 @@ public class UI {
 		labels = ResourceBundle.getBundle("LabelsBundle", new Locale(lang));
 		CardLayout cardLayout = new CardLayout();
 		//Get title for window. You need to use the key "frame" to get the expected string
+		calendarFrame = new JFrame(labels.getString("calendarFrame"));
+		calendarFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		calendarFrame.setSize(300, 300);
+		JPanel CalendarPane = new JPanel();
+		CalendarPane.setLayout(null);
+		calendarFrame.add(CalendarPane);
 		frame = new JFrame(labels.getString("frame"));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JMenuBar menuBar = new JMenuBar();
@@ -124,63 +132,63 @@ public class UI {
 		HouseLbl = new JLabel(labels.getString("HouseLbl"));
 		HouseLbl.setFont(new Font("Roboto", Font.PLAIN, 20));
 		HouseLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		HouseLbl.setBounds(199, 16, 210, 25);
+		HouseLbl.setBounds(149, 16, 210, 25);
 		panel1.add(HouseLbl);
 
 		hs1 = new JButton(labels.getString("hs1"));
-		hs1.setBounds(179, 60, 117, 29);
+		hs1.setBounds(129, 60, 117, 29);
 		panel1.add(hs1);
 
 		hs3 = new JButton(labels.getString("hs3"));
-		hs3.setBounds(179, 101, 117, 29);
+		hs3.setBounds(129, 101, 117, 29);
 		panel1.add(hs3);
 
 		hs5 = new JButton(labels.getString("hs5"));
-		hs5.setBounds(179, 142, 117, 29);
+		hs5.setBounds(129, 142, 117, 29);
 		panel1.add(hs5);
 
 		hs7 = new JButton(labels.getString("hs7"));
-		hs7.setBounds(179, 183, 117, 29);
+		hs7.setBounds(129, 183, 117, 29);
 		panel1.add(hs7);
 
 		hs2 = new JButton(labels.getString("hs2"));
-		hs2.setBounds(308, 60, 117, 29);
+		hs2.setBounds(258, 60, 117, 29);
 		panel1.add(hs2);
 
 		hs4 = new JButton(labels.getString("hs4"));
-		hs4.setBounds(308, 101, 117, 29);
+		hs4.setBounds(258, 101, 117, 29);
 		panel1.add(hs4);
 
 		hs6 = new JButton(labels.getString("hs6"));
-		hs6.setBounds(308, 142, 117, 29);
+		hs6.setBounds(258, 142, 117, 29);
 		panel1.add(hs6);
 
 		hs8 = new JButton(labels.getString("hs8"));
-		hs8.setBounds(308, 183, 117, 29);
+		hs8.setBounds(258, 183, 117, 29);
 		panel1.add(hs8);
 
 		hs9 = new JButton(labels.getString("hs9"));
-		hs9.setBounds(179, 224, 117, 29);
+		hs9.setBounds(129, 224, 117, 29);
 		panel1.add(hs9);
 
 		hs10 = new JButton(labels.getString("hs10"));
-		hs10.setBounds(308, 224, 117, 29);
+		hs10.setBounds(258, 224, 117, 29);
 		panel1.add(hs10);
 		panel2.setLayout(null);
 		dailyStatsLbl = new JLabel(labels.getString("dailyStatsLbl"));
 		dailyStatsLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		dailyStatsLbl.setFont(new Font("Roboto", Font.PLAIN, 18));
-		dailyStatsLbl.setBounds(88, 18, 232, 22);
+		dailyStatsLbl.setBounds(138, 18, 232, 22);
 		panel2.add(dailyStatsLbl);
 
 		comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {labels.getString("hs1"), labels.getString("hs2"), labels.getString("hs3"), labels.getString("hs4"),
 				labels.getString("hs5"), labels.getString("hs6"), labels.getString("hs7"), labels.getString("hs8"), labels.getString("hs9"), labels.getString("hs10")}));
-		comboBox.setBounds(107, 87, 111, 27);
+		comboBox.setBounds(157, 87, 141, 27);
 		panel2.add(comboBox);
 
 		hsSelectLbl = new JLabel(labels.getString("hsSelectLbl"));
-		hsSelectLbl.setBounds(109, 69, 134, 16);
+		hsSelectLbl.setBounds(159, 69, 134, 16);
 		panel2.add(hsSelectLbl);
 
 		refreshDailyBtn = new JButton(labels.getString("refreshDailyBtn"));
@@ -191,91 +199,95 @@ public class UI {
 		//panel3.add(refreshBtn);
 
 		rateLbl = new JLabel(labels.getString("rateLbl"));
-		rateLbl.setBounds(10, 139, 191, 16);
+		rateLbl.setBounds(60, 139, 191, 16);
 		panel2.add(rateLbl);
 		//panel3.add(rateLbl);
 
 		final JLabel rateDisplay = new JLabel("--%");
-		rateDisplay.setBounds(209, 139, 100, 16);
+		rateDisplay.setBounds(259, 139, 100, 16);
 		panel2.add(rateDisplay);
 
 		deathLbl = new JLabel(labels.getString("deathLbl"));
 		deathLbl.setToolTipText("Death count measure in absolute");
-		deathLbl.setBounds(10, 167, 91, 16);
+		deathLbl.setBounds(60, 167, 91, 16);
 		panel2.add(deathLbl);
 		//panel3.add(rateLbl);
 
 		final JLabel rateDisplay_1 = new JLabel("999");
-		rateDisplay_1.setBounds(209, 167, 100, 16);
+		rateDisplay_1.setBounds(259, 167, 100, 16);
 		panel2.add(rateDisplay_1);
 
 		consumptionLbl1 = new JLabel(labels.getString("consumptionLbl1"));
 		consumptionLbl1.setToolTipText("Death count measure in absolute");
-		consumptionLbl1.setBounds(10, 199, 111, 16);
+		consumptionLbl1.setBounds(60, 199, 111, 16);
 		panel2.add(consumptionLbl1);
 		//panel3.add(rateLbl);
 
 		consumptionLbl2 = new JLabel(labels.getString("consumptionLbl2"));
 		consumptionLbl2.setToolTipText("Death count measure in absolute");
-		consumptionLbl2.setBounds(10, 227, 159, 16);
+		consumptionLbl2.setBounds(60, 227, 159, 16);
 		panel2.add(consumptionLbl2);
 		//panel3.add(rateLbl);
 
 		final JLabel rateDisplay_1_1 = new JLabel("???");
-		rateDisplay_1_1.setBounds(209, 199, 100, 16);
+		rateDisplay_1_1.setBounds(259, 199, 100, 16);
 		panel2.add(rateDisplay_1_1);
 
 		final JLabel rateDisplay_1_1_1 = new JLabel("???");
-		rateDisplay_1_1_1.setBounds(209, 228, 100, 16);
+		rateDisplay_1_1_1.setBounds(259, 228, 100, 16);
 		panel2.add(rateDisplay_1_1_1);
 		
 		insTotalBirds = new JLabel(labels.getString("insTotalBirds"));
-		insTotalBirds.setBounds(10, 258, 240, 16);
+		insTotalBirds.setBounds(60, 258, 270, 16);
 		panel2.add(insTotalBirds);
 		
 		final JTextField setTotalBirds = new JTextField();
-		setTotalBirds.setBounds(276, 258, 100, 16);
+		setTotalBirds.setBounds(356, 258, 100, 16);
 		panel2.add(setTotalBirds);
 		
 		insDeadBirds = new JLabel(labels.getString("insDeadBirds"));
-		insDeadBirds.setBounds(10, 288, 240, 16);
+		insDeadBirds.setBounds(60, 288, 270, 16);
 		panel2.add(insDeadBirds);
 		
 		final JTextField setDeadBirds = new JTextField();
-		setDeadBirds.setBounds(276, 288, 100, 16);
+		setDeadBirds.setBounds(356, 288, 100, 16);
 		panel2.add(setDeadBirds);
 		
 		insTotalWeight = new JLabel(labels.getString("insTotalWeight"));
-		insTotalWeight.setBounds(10, 318, 240, 16);
+		insTotalWeight.setBounds(60, 318, 270, 16);
 		panel2.add(insTotalWeight);
 		
 		final JTextField setTotalWeight = new JTextField();
-		setTotalWeight.setBounds(276, 318, 100, 16);
+		setTotalWeight.setBounds(356, 318, 100, 16);
 		panel2.add(setTotalWeight);
 		
 		insTotalFood = new JLabel(labels.getString("insTotalFood"));
-		insTotalFood.setBounds(10, 348, 240, 16);
+		insTotalFood.setBounds(60, 348, 270, 16);
 		panel2.add(insTotalFood);
 		
 		final JTextField setTotalFood = new JTextField();
-		setTotalFood.setBounds(276, 348, 100, 16);
+		setTotalFood.setBounds(356, 348, 100, 16);
 		panel2.add(setTotalFood);
 		
 		insConsFood = new JLabel(labels.getString("insConsFood"));
-		insConsFood.setBounds(10, 378, 240, 16);
+		insConsFood.setBounds(60, 378, 270, 16);
 		panel2.add(insConsFood);
 		
 		final JTextField setConsFood = new JTextField();
-		setConsFood.setBounds(276, 378, 100, 16);
+		setConsFood.setBounds(356, 378, 100, 16);
 		panel2.add(setConsFood);
 		
-		calendar1 = new JCalendar();
-		calendar1.setLocale(new Locale(lang));
-		calendar1.setBounds(343, 50, 250, 200);
-		panel2.add(calendar1);
+		showcalendar1 = new JButton(labels.getString("showCalendar"));
+		showcalendar1.setBounds(293, 50, 200, 29);
+		panel2.add(showcalendar1);
+		
+		calendar = new JCalendar();
+		calendar.setLocale(new Locale(lang));
+		calendar.setBounds(0, 0, 250, 200);
+		CalendarPane.add(calendar);
 		
 		save = new JButton(labels.getString("save"));
-		save.setBounds(250, 458, 100, 30);
+		save.setBounds(200, 458, 100, 30);
 		panel2.add(save);
 		
 		panel3_1 = new MyPanel3(contentPane);
@@ -283,34 +295,33 @@ public class UI {
 		panel3_1.setLayout(null);
 		
 		
-		calendar2 = new JCalendar();
-		calendar2.setLocale(new Locale(lang));
-		calendar2.setBounds(343, 50, 250, 200);
-		panel3_1.add(calendar2);
+		showcalendar2 = new JButton(labels.getString("showCalendar"));
+		showcalendar2.setBounds(293, 50, 200, 29);
+		panel3_1.add(showcalendar2);
 		
 		totStatsLbl = new JLabel(labels.getString("totStatsLbl"));
 		totStatsLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		totStatsLbl.setFont(new Font("Roboto", Font.PLAIN, 18));
-		totStatsLbl.setBounds(88, 18, 232, 22);
+		totStatsLbl.setBounds(138, 18, 232, 22);
 		panel3_1.add(totStatsLbl);
 
 		rateLblTot = new JLabel(labels.getString("rateLblTot"));
-		rateLblTot.setBounds(10, 139, 191, 16);
+		rateLblTot.setBounds(60, 139, 191, 16);
 		panel3_1.add(rateLblTot);
 
 		deathLblTot = new JLabel(labels.getString("deathLblTot"));
 		deathLblTot.setToolTipText("Death count measure in absolute");
-		deathLblTot.setBounds(10, 161, 91, 16);
+		deathLblTot.setBounds(60, 161, 91, 16);
 		panel3_1.add(deathLblTot);
 
 		consumptionLblTot = new JLabel(labels.getString("consumptionLblTot"));
 		consumptionLblTot.setToolTipText("Death count measure in absolute");
-		consumptionLblTot.setBounds(10, 193, 111, 16);
+		consumptionLblTot.setBounds(60, 193, 111, 16);
 		panel3_1.add(consumptionLblTot);
 
 		consumptionLblTotal = new JLabel(labels.getString("consumptionLblTotal"));
 		consumptionLblTotal.setToolTipText("Death count measure in absolute");
-		consumptionLblTotal.setBounds(10, 227, 159, 16);
+		consumptionLblTotal.setBounds(60, 227, 159, 16);
 		panel3_1.add(consumptionLblTotal);
 
 		refreshTotalBtn = new JButton(labels.getString("refreshTotalBtn"));
@@ -318,19 +329,19 @@ public class UI {
 		panel3_1.add(refreshTotalBtn);
 
 		final JLabel rateDisplayTotal = new JLabel("--%");
-		rateDisplayTotal.setBounds(259, 133, 61, 16);
+		rateDisplayTotal.setBounds(309, 133, 61, 16);
 		panel3_1.add(rateDisplayTotal);
 
 		final JLabel rateDisplay_1_2 = new JLabel("999");
-		rateDisplay_1_2.setBounds(259, 161, 61, 16);
+		rateDisplay_1_2.setBounds(309, 161, 61, 16);
 		panel3_1.add(rateDisplay_1_2);
 
 		final JLabel rateDisplay_1_1_2 = new JLabel("???");
-		rateDisplay_1_1_2.setBounds(259, 193, 61, 16);
+		rateDisplay_1_1_2.setBounds(309, 193, 61, 16);
 		panel3_1.add(rateDisplay_1_1_2);
 
 		final JLabel rateDisplay_1_1_1_1 = new JLabel("???");
-		rateDisplay_1_1_1_1.setBounds(259, 222, 61, 16);
+		rateDisplay_1_1_1_1.setBounds(309, 222, 61, 16);
 		panel3_1.add(rateDisplay_1_1_1_1);
 		contentPane.add(panel4, "Panel 4");
 		panel4.setLayout(null);
@@ -442,6 +453,25 @@ public class UI {
 		            }
 			}
 		});
+		
+		showcalendar1.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				showCalendar();
+				
+			}
+			
+		});
+		showcalendar2.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				showCalendar();
+				
+			}
+			
+		});
 
 		save.addActionListener(new ActionListener() {
 
@@ -451,7 +481,7 @@ public class UI {
                 if(item.equals(labels.getString("hs1"))) {
                 	try {
     					//Execute query to add daily info
-    					stmt.execute(String.format(setHouseDataQuery, 1, calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+    					stmt.execute(String.format(setHouseDataQuery, 1, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
     					
     				} catch (SQLException e1) {
     					e1.printStackTrace();
@@ -459,7 +489,7 @@ public class UI {
                 } else if(item.equals(labels.getString("hs2"))) {
                 	try {
                 		//Execute query to add daily info
-                		stmt.execute(String.format(setHouseDataQuery, 2, calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+                		stmt.execute(String.format(setHouseDataQuery, 2, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
     					
     				} catch (SQLException e1) {
     					e1.printStackTrace();
@@ -467,56 +497,56 @@ public class UI {
                 }else if(item.equals(labels.getString("hs3"))) {
                 	try {
                 		//Execute query to add daily info
-                		stmt.execute(String.format(setHouseDataQuery, 3,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+                		stmt.execute(String.format(setHouseDataQuery, 3,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
     				} catch (SQLException e1) {
     					e1.printStackTrace();
     				}
                 }else if(item.equals(labels.getString("hs4"))) {
                 	try {
                 		//Execute query to add daily info
-                		stmt.execute(String.format(setHouseDataQuery, 4,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+                		stmt.execute(String.format(setHouseDataQuery, 4,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
     				} catch (SQLException e1) {
     					e1.printStackTrace();
     				}
                 }else if(item.equals(labels.getString("hs5"))) {
                 	try {
                 		//Execute query to add daily info
-                		stmt.execute(String.format(setHouseDataQuery, 5,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+                		stmt.execute(String.format(setHouseDataQuery, 5,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
     				} catch (SQLException e1) {
     					e1.printStackTrace();
     				}
                 }else if(item.equals(labels.getString("hs6"))) {
                 	try {
                 		//Execute query to add daily info
-                		stmt.execute(String.format(setHouseDataQuery, 6,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+                		stmt.execute(String.format(setHouseDataQuery, 6,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
     				} catch (SQLException e1) {
     					e1.printStackTrace();
     				}
                 }else if(item.equals(labels.getString("hs7"))) {
                 	try {
                 		//Execute query to add daily info
-                		stmt.execute(String.format(setHouseDataQuery, 7,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+                		stmt.execute(String.format(setHouseDataQuery, 7,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
     				} catch (SQLException e1) {
     					e1.printStackTrace();
     				}
                 }else if(item.equals(labels.getString("hs8"))) {
                 	try {
                 		//Execute query to add daily info
-                		stmt.execute(String.format(setHouseDataQuery, 8, calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+                		stmt.execute(String.format(setHouseDataQuery, 8, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
     				} catch (SQLException e1) {
     					e1.printStackTrace();
     				}
                 }else if(item.equals(labels.getString("hs9"))) {
                 	try {
                 		//Execute query to add daily info
-                		stmt.execute(String.format(setHouseDataQuery, 9, calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+                		stmt.execute(String.format(setHouseDataQuery, 9, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
     				} catch (SQLException e1) {
     					e1.printStackTrace();
     				}
                 }else if(item.equals(labels.getString("hs1"))) {
                 	try {
                 		//Execute query to add daily info
-                		stmt.execute(String.format(setHouseDataQuery, 10, calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+                		stmt.execute(String.format(setHouseDataQuery, 10, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
     				} catch (SQLException e1) {
     					e1.printStackTrace();
     				}
@@ -550,7 +580,7 @@ public class UI {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					//Execute query to change language
-					ResultSet rs = stmt.executeQuery(String.format(getTotalStatisticQuery, calendar2.getYearChooser().getYear()+"-"+(calendar2.getMonthChooser().getMonth()+1)+"-"+calendar2.getDayChooser().getDay()));
+					ResultSet rs = stmt.executeQuery(String.format(getTotalStatisticQuery, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 					if(rs.next()) {
 						rateDisplayTotal.setText(rs.getFloat("survival_rate")+"%");
 						rateDisplay_1_2.setText((rs.getInt("dead_birds"))+"");
@@ -578,7 +608,7 @@ public class UI {
 				comboBox.setSelectedIndex(0);
 				try {
 					//Execute query to change language
-					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 1,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 1,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 					if(rs.next()) {
 						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -604,7 +634,7 @@ public class UI {
 				comboBox.setSelectedIndex(1);
 				try {
 					//Execute query to change language
-					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 2,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 2,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 					if(rs.next()) {
 						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -630,7 +660,7 @@ public class UI {
 				comboBox.setSelectedIndex(2);
 				try {
 					//Execute query to change language
-					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 3,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 3,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 					if(rs.next()) {
 						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -656,7 +686,7 @@ public class UI {
 				comboBox.setSelectedIndex(3);
 				try {
 					//Execute query to change language
-					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 4,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 4,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 					if(rs.next()) {
 						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -682,7 +712,7 @@ public class UI {
 				comboBox.setSelectedIndex(4);
 				try {
 					//Execute query to change language
-					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 5,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 5,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 					if(rs.next()) {
 						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -708,7 +738,7 @@ public class UI {
 				comboBox.setSelectedIndex(5);
 				try {
 					//Execute query to change language
-					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 6,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 6,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 					if(rs.next()) {
 						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -734,7 +764,7 @@ public class UI {
 				comboBox.setSelectedIndex(6);
 				try {
 					//Execute query to change language
-					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 7,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 7,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 					if(rs.next()) {
 						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -760,7 +790,7 @@ public class UI {
 				comboBox.setSelectedIndex(7);
 				try {
 					//Execute query to change language
-					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 8,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 8,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 					if(rs.next()) {
 						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -786,7 +816,7 @@ public class UI {
 				comboBox.setSelectedIndex(8);
 				try {
 					//Execute query to change language
-					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 9,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 9,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 					if(rs.next()) {
 						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -812,7 +842,7 @@ public class UI {
 				comboBox.setSelectedIndex(9);
 				try {
 					//Execute query to change language
-					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 10,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+					ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 10,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 					if(rs.next()) {
 						rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 						rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -850,7 +880,7 @@ public class UI {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					//Execute query to change language
-					ResultSet rs = stmt.executeQuery(String.format(getTotalStatisticQuery, calendar2.getYearChooser().getYear()+"-"+(calendar2.getMonthChooser().getMonth()+1)+"-"+calendar2.getDayChooser().getDay()));
+					ResultSet rs = stmt.executeQuery(String.format(getTotalStatisticQuery, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 					if(rs.next()) {
 						rateDisplayTotal.setText(rs.getFloat("survival_rate")+"%");
 						rateDisplay_1_2.setText((rs.getInt("dead_birds"))+"");
@@ -876,8 +906,7 @@ public class UI {
 	void ChangeLocale(String lang) {
 		frame.setTitle(labels.getString("frame"));
 		langLbl.setText(labels.getString("langLbl"));
-		calendar1.setLocale(new Locale(lang));
-		calendar2.setLocale(new Locale(lang));
+		calendar.setLocale(new Locale(lang));
 		HouseItem.setText(labels.getString("HouseItem"));
 		DailyStatsItem.setText(labels.getString("DailyStatsItem"));
 		TotalStatsItem.setText(labels.getString("TotalStatsItem"));
@@ -917,6 +946,9 @@ public class UI {
     	insTotalFood.setText(labels.getString("insTotalFood"));
     	insConsFood.setText(labels.getString("insConsFood"));
     	save.setText(labels.getString("save"));
+    	showcalendar1.setText(labels.getString("showCalendar"));
+    	showcalendar2.setText(labels.getString("showCalendar"));
+    	calendarFrame.setTitle(labels.getString("calendarFrame"));
 	}
 	
 	void getDailyStatistic(JLabel rateDisplay,JLabel rateDisplay_1,JLabel rateDisplay_1_1,JLabel rateDisplay_1_1_1) {
@@ -924,7 +956,7 @@ public class UI {
         if(item.equals(labels.getString("hs1"))) {
         	try {
 				//Execute query to change language
-				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 1,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 1,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
 					rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 					rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -942,7 +974,7 @@ public class UI {
         } else if(item.equals(labels.getString("hs2"))) {
         	try {
 				//Execute query to change language
-				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 2,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 2,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
 					rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 					rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -960,7 +992,7 @@ public class UI {
         }else if(item.equals(labels.getString("hs3"))) {
         	try {
 				//Execute query to change language
-				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 3,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 3,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
 					rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 					rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -978,7 +1010,7 @@ public class UI {
         }else if(item.equals(labels.getString("hs4"))) {
         	try {
 				//Execute query to change language
-				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 4,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 4,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
 					rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 					rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -996,7 +1028,7 @@ public class UI {
         }else if(item.equals(labels.getString("hs5"))) {
         	try {
 				//Execute query to change language
-				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 5,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 5,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
 					rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 					rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -1014,7 +1046,7 @@ public class UI {
         }else if(item.equals(labels.getString("hs6"))) {
         	try {
 				//Execute query to change language
-				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 6,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 6,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
 					rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 					rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -1032,7 +1064,7 @@ public class UI {
         }else if(item.equals(labels.getString("hs7"))) {
         	try {
 				//Execute query to change language
-				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 7,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 7,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
 					rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 					rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -1050,7 +1082,7 @@ public class UI {
         }else if(item.equals(labels.getString("hs8"))) {
         	try {
 				//Execute query to change language
-				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 8,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 8,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
 					rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 					rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -1068,7 +1100,7 @@ public class UI {
         }else if(item.equals(labels.getString("hs9"))) {
         	try {
 				//Execute query to change language
-				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 9,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 9,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
 					rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 					rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -1086,7 +1118,7 @@ public class UI {
         }else if(item.equals(labels.getString("hs10"))) {
         	try {
 				//Execute query to change language
-				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 10,calendar1.getYearChooser().getYear()+"-"+(calendar1.getMonthChooser().getMonth()+1)+"-"+calendar1.getDayChooser().getDay()));
+				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 10,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
 					rateDisplay.setText(((rs.getInt("total_birds_h")-rs.getInt("dead_birds_h"))*100f/rs.getInt("total_birds_h"))+"%");
 					rateDisplay_1.setText((rs.getInt("dead_birds_h"))+"");
@@ -1102,6 +1134,9 @@ public class UI {
 				e1.printStackTrace();
 			}
         }
+	}
+	void showCalendar() {
+		calendarFrame.setVisible(true);
 	}
 }
 
@@ -1162,6 +1197,6 @@ class MyPanel4 extends JPanel {
 
 	@Override
 	public Dimension getPreferredSize() {
-		return (new Dimension(600, 500));
+		return (new Dimension(500, 500));
 	}
 }
