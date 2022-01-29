@@ -1,5 +1,4 @@
-
-import java.awt.*;
+﻿import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,12 +15,15 @@ import javax.swing.event.ChangeListener;
 import com.toedter.calendar.JCalendar;
 
 public class UI {
+	private static int INVALID_ID = 0;
 	//JDBC variables for opening and managing connection
 	private static Connection con;
     private static Statement stmt;
     //query to change language
+    private String getIdQuery = "SELECT id_record FROM house_database.house_data where date = '%s' and house_id = %d limit 1;";
+    private String updateDailyStatistic = "update house_database.house_data set total_birds_h = %d, dead_birds_h = %d, food_total = %d, food_cons = %d, weight_total = %d where id_record=%d;";
     private String changeLangQuery = "update house_database.users set lang = '%s' where id=%d;";
-    private String setHouseDataQuery = "insert into house_database.house_data values (%d, '%s', %d, %d, %d, %d, %d);";
+    private String setHouseDataQueryWithoutId = "insert into house_database.house_data (house_id,date,total_birds_h,dead_birds_h,food_total,food_cons,weight_total) values (%d, '%s', %d, %d, %d, %d, %d);";
     private String getDailyStatisticForHouse = "SELECT * FROM house_database.house_data where house_id = %d and date= '%s' ORDER BY date desc limit 1;";
     private String getTotalStatisticQuery = "SELECT SUM(total_birds_h - dead_birds_h)/sum(total_birds_h)*100 as 'survival_rate', SUM(dead_birds_h) as 'dead_birds', sum(weight_total)/count(weight_total) as 'weight_total', sum(food_total-food_cons) as 'food_cons'  FROM house_database.house_data where date = '%s';";
 	private JPanel contentPane;
@@ -478,80 +480,97 @@ public class UI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String item = (String)comboBox.getSelectedItem();
+				try {
+					ResultSet rs = stmt.executeQuery(String.format(getIdQuery, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt( item.split(" ")[1])));
+					int currentId;
+					if(rs.next()) {
+						currentId= rs.getInt("id_record");
+					} else
+						currentId= INVALID_ID;
                 if(item.equals(labels.getString("hs1"))) {
-                	try {
+                		System.out.println(1+" "+currentId);
     					//Execute query to add daily info
-    					stmt.execute(String.format(setHouseDataQuery, 1, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
-    					
-    				} catch (SQLException e1) {
-    					e1.printStackTrace();
-    				}
+                		if(currentId == INVALID_ID)
+                			stmt.execute(String.format(setHouseDataQueryWithoutId, 1, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+                		else
+                			stmt.execute(String.format(updateDailyStatistic, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText()), currentId));
+    				
                 } else if(item.equals(labels.getString("hs2"))) {
-                	try {
+                	System.out.println(2+" "+currentId);
                 		//Execute query to add daily info
-                		stmt.execute(String.format(setHouseDataQuery, 2, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
-    					
-    				} catch (SQLException e1) {
-    					e1.printStackTrace();
-    				}
+                		if(currentId == INVALID_ID)
+                			stmt.execute(String.format(setHouseDataQueryWithoutId, 2, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+                		else
+                			stmt.execute(String.format(updateDailyStatistic, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText()), currentId));
+    				
                 }else if(item.equals(labels.getString("hs3"))) {
-                	try {
+                	System.out.println(3+" "+currentId);
                 		//Execute query to add daily info
-                		stmt.execute(String.format(setHouseDataQuery, 3,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
-    				} catch (SQLException e1) {
-    					e1.printStackTrace();
-    				}
+                		if(currentId == INVALID_ID)
+                			stmt.execute(String.format(setHouseDataQueryWithoutId, 3, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+                		else
+                			stmt.execute(String.format(updateDailyStatistic, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText()), currentId));
+    				
                 }else if(item.equals(labels.getString("hs4"))) {
-                	try {
+                	System.out.println(4+" "+currentId);
                 		//Execute query to add daily info
-                		stmt.execute(String.format(setHouseDataQuery, 4,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
-    				} catch (SQLException e1) {
-    					e1.printStackTrace();
-    				}
+                		if(currentId == INVALID_ID)
+                			stmt.execute(String.format(setHouseDataQueryWithoutId, 4, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+                		else
+                			stmt.execute(String.format(updateDailyStatistic, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText()), currentId));
+    				
                 }else if(item.equals(labels.getString("hs5"))) {
-                	try {
+                	System.out.println(5+" "+currentId);
                 		//Execute query to add daily info
-                		stmt.execute(String.format(setHouseDataQuery, 5,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
-    				} catch (SQLException e1) {
-    					e1.printStackTrace();
-    				}
+                		if(currentId == INVALID_ID)
+                			stmt.execute(String.format(setHouseDataQueryWithoutId, 5, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+                		else
+                			stmt.execute(String.format(updateDailyStatistic, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText()), currentId));
+    				
                 }else if(item.equals(labels.getString("hs6"))) {
-                	try {
+                	System.out.println(6+" "+currentId);
                 		//Execute query to add daily info
-                		stmt.execute(String.format(setHouseDataQuery, 6,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
-    				} catch (SQLException e1) {
-    					e1.printStackTrace();
-    				}
+                		if(currentId == INVALID_ID)
+                			stmt.execute(String.format(setHouseDataQueryWithoutId, 6, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+                		else
+                			stmt.execute(String.format(updateDailyStatistic, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText()), currentId));
+    				
                 }else if(item.equals(labels.getString("hs7"))) {
-                	try {
+                	System.out.println(7+" "+currentId);
                 		//Execute query to add daily info
-                		stmt.execute(String.format(setHouseDataQuery, 7,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
-    				} catch (SQLException e1) {
-    					e1.printStackTrace();
-    				}
+                		if(currentId == INVALID_ID)
+                			stmt.execute(String.format(setHouseDataQueryWithoutId, 7, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+                		else
+                			stmt.execute(String.format(updateDailyStatistic, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText()), currentId));
+    				
                 }else if(item.equals(labels.getString("hs8"))) {
-                	try {
+                	System.out.println(8+" "+currentId);
                 		//Execute query to add daily info
-                		stmt.execute(String.format(setHouseDataQuery, 8, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
-    				} catch (SQLException e1) {
-    					e1.printStackTrace();
-    				}
+                		if(currentId == INVALID_ID)
+                			stmt.execute(String.format(setHouseDataQueryWithoutId, 8, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+                		else
+                			stmt.execute(String.format(updateDailyStatistic, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText()), currentId));
+    				
                 }else if(item.equals(labels.getString("hs9"))) {
-                	try {
+                	System.out.println(9+" "+currentId);
                 		//Execute query to add daily info
-                		stmt.execute(String.format(setHouseDataQuery, 9, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
-    				} catch (SQLException e1) {
-    					e1.printStackTrace();
-    				}
-                }else if(item.equals(labels.getString("hs1"))) {
-                	try {
+                		if(currentId == INVALID_ID)
+                			stmt.execute(String.format(setHouseDataQueryWithoutId, 9, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+                		else
+                			stmt.execute(String.format(updateDailyStatistic, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText()), currentId));
+    				
+                }else if(item.equals(labels.getString("hs10"))) {
+                	System.out.println(10+" "+currentId);
                 		//Execute query to add daily info
-                		stmt.execute(String.format(setHouseDataQuery, 10, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
-    				} catch (SQLException e1) {
-    					e1.printStackTrace();
-    				}
+                		if(currentId == INVALID_ID)
+                			stmt.execute(String.format(setHouseDataQueryWithoutId, 10, calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay(), Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText())));
+                		else
+                			stmt.execute(String.format(updateDailyStatistic, Integer.parseInt(setTotalBirds.getText()),Integer.parseInt(setDeadBirds.getText()),Integer.parseInt(setTotalFood.getText()),Integer.parseInt(setConsFood.getText()),Integer.parseInt(setTotalWeight.getText()), currentId));
+    				
                 }
-				
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		
@@ -953,8 +972,9 @@ public class UI {
 	
 	void getDailyStatistic(JLabel rateDisplay,JLabel rateDisplay_1,JLabel rateDisplay_1_1,JLabel rateDisplay_1_1_1) {
 		String item = (String)comboBox.getSelectedItem();
+		try {
         if(item.equals(labels.getString("hs1"))) {
-        	try {
+        	
 				//Execute query to change language
 				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 1,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
@@ -968,11 +988,9 @@ public class UI {
 					rateDisplay_1_1.setText(labels.getString("noData"));
 					rateDisplay_1_1_1.setText(labels.getString("noData"));
 				}
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+			
         } else if(item.equals(labels.getString("hs2"))) {
-        	try {
+        	
 				//Execute query to change language
 				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 2,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
@@ -986,11 +1004,9 @@ public class UI {
 					rateDisplay_1_1.setText(labels.getString("noData"));
 					rateDisplay_1_1_1.setText(labels.getString("noData"));
 				}
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+			
         }else if(item.equals(labels.getString("hs3"))) {
-        	try {
+        	
 				//Execute query to change language
 				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 3,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
@@ -1004,11 +1020,9 @@ public class UI {
 					rateDisplay_1_1.setText(labels.getString("noData"));
 					rateDisplay_1_1_1.setText(labels.getString("noData"));
 				}
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+			
         }else if(item.equals(labels.getString("hs4"))) {
-        	try {
+        	
 				//Execute query to change language
 				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 4,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
@@ -1022,11 +1036,9 @@ public class UI {
 					rateDisplay_1_1.setText(labels.getString("noData"));
 					rateDisplay_1_1_1.setText(labels.getString("noData"));
 				}
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+			
         }else if(item.equals(labels.getString("hs5"))) {
-        	try {
+        	
 				//Execute query to change language
 				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 5,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
@@ -1040,11 +1052,9 @@ public class UI {
 					rateDisplay_1_1.setText(labels.getString("noData"));
 					rateDisplay_1_1_1.setText(labels.getString("noData"));
 				}
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+			
         }else if(item.equals(labels.getString("hs6"))) {
-        	try {
+        	
 				//Execute query to change language
 				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 6,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
@@ -1058,11 +1068,9 @@ public class UI {
 					rateDisplay_1_1.setText(labels.getString("noData"));
 					rateDisplay_1_1_1.setText(labels.getString("noData"));
 				}
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+			
         }else if(item.equals(labels.getString("hs7"))) {
-        	try {
+        	
 				//Execute query to change language
 				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 7,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
@@ -1076,11 +1084,9 @@ public class UI {
 					rateDisplay_1_1.setText(labels.getString("noData"));
 					rateDisplay_1_1_1.setText(labels.getString("noData"));
 				}
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+			
         }else if(item.equals(labels.getString("hs8"))) {
-        	try {
+        	
 				//Execute query to change language
 				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 8,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
@@ -1094,11 +1100,9 @@ public class UI {
 					rateDisplay_1_1.setText(labels.getString("noData"));
 					rateDisplay_1_1_1.setText(labels.getString("noData"));
 				}
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+			
         }else if(item.equals(labels.getString("hs9"))) {
-        	try {
+        	
 				//Execute query to change language
 				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 9,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
@@ -1112,11 +1116,9 @@ public class UI {
 					rateDisplay_1_1.setText(labels.getString("noData"));
 					rateDisplay_1_1_1.setText(labels.getString("noData"));
 				}
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+			
         }else if(item.equals(labels.getString("hs10"))) {
-        	try {
+        	
 				//Execute query to change language
 				ResultSet rs = stmt.executeQuery(String.format(getDailyStatisticForHouse, 10,calendar.getYearChooser().getYear()+"-"+(calendar.getMonthChooser().getMonth()+1)+"-"+calendar.getDayChooser().getDay()));
 				if(rs.next()) {
@@ -1130,10 +1132,11 @@ public class UI {
 					rateDisplay_1_1.setText(labels.getString("noData"));
 					rateDisplay_1_1_1.setText(labels.getString("noData"));
 				}
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+			
         }
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 	}
 	void showCalendar() {
 		calendarFrame.setVisible(true);

@@ -100,14 +100,16 @@ public class CreatorDB {
             water_cons of float to save water consumptions
             and house_id of integer to identify house
              */
-            stmt.executeUpdate("CREATE TABLE `house_database`.`house_data` (\n" +
+            stmt.executeUpdate("CREATE TABLE `house_database`.`house_data` (\n" 
+            		+ "  `id_record` INT NOT NULL AUTO_INCREMENT,\r\n" +
                     "  `house_id` INT NOT NULL,\n" +
                     "  `date` DATE NOT NULL,\n" +
                     "  `total_birds_h` INT NOT NULL,\n" +
                     "  `dead_birds_h` INT NOT NULL,\n" +
                     "  `food_total` FLOAT NOT NULL,\n" +
                     "  `food_cons` FLOAT NOT NULL,\n" +
-                    "  `weight_total` FLOAT NOT NULL);");
+                    "  `weight_total` FLOAT NOT NULL,"
+                    + "  PRIMARY KEY (`id_record`));");
         } catch (SQLException sqlEx) {
             //Catching exceptions and print it into console
             sqlEx.printStackTrace();
